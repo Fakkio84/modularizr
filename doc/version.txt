@@ -1,0 +1,5 @@
+HTML5BoilerPlate: 4.3.0
+Bootstrap: 3.3.2
+jquery 1.11.2
+fontawesome 4.3.0
+highlight 8.8.0
