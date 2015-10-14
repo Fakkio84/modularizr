@@ -20,15 +20,12 @@ var modularizr = (function(){
 		}
 	};
 	
-	publicMethods.make = function () {
+	publicMethods.make = function (modulesNames) {
 		//Te object to make
 		var object = {publicMethods: {}, protectedMethods: {}};
 		
-		//Convert the arguments object to an array
-		var args = Array.prototype.slice.call(arguments);
-		
 		//Loop trought arguments and append module to the object
-		args.forEach(function(module){
+		modulesNames.forEach(function(module){
 			if (modules[module]) {
 				object = modules[module](object.publicMethods, object.protectedMethods);
 			}
@@ -133,6 +130,6 @@ modularizr.register('module2', function(publicMethods, protectedMethods){
 	};
 });
 
-var myModularizr = modularizr.make('module1', 'module2');
+var myModularizr = modularizr.make(['module1', 'module2']);
 
 //@koala-prepend "source/_modularizr"
