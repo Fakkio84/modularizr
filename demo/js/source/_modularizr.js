@@ -1,11 +1,11 @@
 var modularizr = (function(){
 	'use strict';
-	var publicMethods = {};
-	var modules = {};
+	var publicScope = {};
+	var registeredModules = {};
 	
-	publicMethods.register = function(name, module){
-		if (!modules[name]) {
-			modules[name] = module;
+	publicScope.register = function(name, module){
+		if (!registeredModules[name]) {
+			registeredModules[name] = module;
 		}
 		else {
 			throw {
@@ -20,24 +20,21 @@ var modularizr = (function(){
 		}
 	};
 	
-	publicMethods.make = function () {
+	publicScope.make = function(modules){
 		//Te object to make
-		var object = {publicMethods: {}, protectedMethods: {}};
-		
-		//Convert the arguments object to an array
-		var args = Array.prototype.slice.call(arguments);
+		var object = {publicScope: {}, protectedScope: {}};
 		
 		//Loop trought arguments and append module to the object
-		args.forEach(function(module){
-			if (modules[module]) {
-				object = modules[module](object.publicMethods, object.protectedMethods);
+		modules.forEach(function(module){
+			if (registeredModules[module]) {
+				object = registeredModules[module](object.publicScope, object.protectedScope);
 			}
 			else {
 				throw {
 					code: 2,
 					name: "Error",
 					description: "Module doesn't exist",
-					message: "Module with name '" + name + "' hasn't been registered yet",
+					message: "Module with name '" + module + "' hasn't been registered yet",
 					toString: function(){
 						return this.name + ": " + this.message;
 					} 
@@ -45,92 +42,8 @@ var modularizr = (function(){
 			}
 		});
 		
-		return object.publicMethods;
+		return object.publicScope;
 	};
 	
-	return publicMethods;
+	return publicScope;
 }());
-
-modularizr.register('module1', function(publicMethods, protectedMethods){
-	'use strict';
-	var property1 = "Private property";
-	var method1 = function () {
-		console.log("I'm a private module1's method");
-		console.log("I'm visible only to module1's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	protectedMethods.property1 = "Protected module1's properties";
-	protectedMethods.method1 = function () {
-		console.log("I'm a protected module1's method");
-		console.log("I'm visible to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	publicMethods.property1 = "Public module1's properties";
-	publicMethods.method1 = function () {
-		console.log("I'm a public module1's method");
-		console.log("I'm visible to everyone can access the outer object, in addition to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-	
-	return {
-		publicMethods: publicMethods,
-		protectedMethods: protectedMethods
-	};
-});
-
-modularizr.register('module2', function(publicMethods, protectedMethods){
-	'use strict';
-	var property2 = "Private property";
-	var method2 = function () {
-		console.log("I'm a private module2's method");
-		console.log("I'm visible only to module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	protectedMethods.property2 = "Protected module2's properties";
-	protectedMethods.method2 = function () {
-		console.log("I'm a protected module2's method");
-		console.log("I'm visible to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	publicMethods.property2 = "Public module2's properties";
-	publicMethods.method2 = function () {
-		console.log("I'm a public module2's method");
-		console.log("I'm visible to everyone can access the outer object, in addition to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-	
-	return {
-		publicMethods: publicMethods,
-		protectedMethods: protectedMethods
-	};
-});
-
-var myModularizr = modularizr.make('module1', 'module2');

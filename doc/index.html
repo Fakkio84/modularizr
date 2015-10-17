@@ -49,9 +49,36 @@
 			</div>
 		</div>
 		<section class="documentation container-fluid">
-			<h1>TODO doc</h1>
-			<h2>make()</h2>
-			<h2>register()</h2>
+			<h1>.make(modules)</h1>
+			<h3>Description</h3>
+			<p>Makes an object build on an array of modules. All <code>modules</code> must be registered before they can be used to make an object with this method.</p>
+			<h3>Parameters</h3>
+			<table class="table table-bordered table-striped js-options-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>modules</td>
+						<td>array</td>
+						<td>An array of strings that contains the modules names from which build the object.</td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Returns</h3>
+			<p>qqwqw</p>
+			<h3>Example</h3>
+			<pre><code class="language-javascript">modularizr.make([
+	"module1",
+	"module2"
+]);</code></pre>
+				</dd>
+			</dl>
+			<h1>.register(name, moduleBody)</h1>
 		</section>
 	</div>
 	<footer class="footer text-center clearfix">
@@ -69,7 +96,7 @@
 		$(function(){
 			var toc = $(".menu, #documentation-menu div").tocify({
 				context: ".documentation",
-				selectors: "h1,h2,h3",
+				selectors: "h1,h2",
 				extendPage: false,
 				scrollTo: 50
 			});
