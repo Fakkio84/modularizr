@@ -47,8 +47,13 @@ var modularizr = (function(){
 	publicScope.class = function(modules){
 		return function(){
 			var object = {publicScope: {}, protectedScope: {}};
+			var argLen, parameters = [], a;
 			
-			var parameters = Array.prototype.slice.call(arguments);
+			/* Arrayfy arguments, don't use, 
+			 * var parameters = Array.prototype.slice.call(arguments);
+			 * see: https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#3-managing-arguments
+			 */
+			argLen = arguments.length; for (a = 0; a < argLen; a++) {parameters[a] = arguments[a];}
 			
 			modules.forEach(function(module){
 				if (registeredModules[module]) {
