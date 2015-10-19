@@ -1,11 +1,19 @@
-var modularizr = (function(){
+var MODULARIZR = (function(){
 	'use strict';
-	var publicScope = {};
-	var registeredModules = {};
+	var publicScope = {};          //The object MODULARIZR
+	var registeredModules = {};    //The modules' pairs {name: module}
 	
+	/**
+	 * Registers a module for use it to build singletons or classes
+	 * @author Fakkio84 [lazzaroni@jeflab.it]
+	 * @param {string} name - The module's name 
+	 * @param {function} module - The module's body
+	 * @returns {boolean} - true if all went ok
+	 */
 	publicScope.register = function(name, module){
 		if (!registeredModules[name]) {
 			registeredModules[name] = module;
+			return true;
 		}
 		else {
 			throw {
@@ -20,6 +28,13 @@ var modularizr = (function(){
 		}
 	};
 	
+	/**
+	 * Builds a singleton from the modules passing them an optional array of parameters
+	 * @author Fakkio84 [lazzaroni@jeflab.it]
+	 * @param {string[]} modules - An array of module names from which to build the singleton
+	 * @param {*[]} [parameters] - An optional array of parameters that will be passed to each modules
+	 * @returns {object} - The resulting object built from the modules application
+	 */
 	publicScope.singleton = function(modules, parameters){
 		//Te object to make
 		var object = {publicScope: {}, protectedScope: {}};
@@ -44,16 +59,17 @@ var modularizr = (function(){
 		return object.publicScope;
 	};
 
+	/**
+	 * Builds a "class" function from the modules
+	 * @author Fakkio84 [lazzaroni@jeflab.it]
+	 * @param {string[]} modules - An array of module names from which to build the "class" function
+	 * @returns {function(...*)} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
+	 */
 	publicScope.class = function(modules){
 		return function(){
 			var object = {publicScope: {}, protectedScope: {}};
-			var argLen, parameters = [], a;
 			
-			/* Arrayfy arguments, don't use, 
-			 * var parameters = Array.prototype.slice.call(arguments);
-			 * see: https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#3-managing-arguments
-			 */
-			argLen = arguments.length; for (a = 0; a < argLen; a++) {parameters[a] = arguments[a];}
+			var parameters = Array.prototype.slice.call(arguments);
 			
 			modules.forEach(function(module){
 				if (registeredModules[module]) {
@@ -61,13 +77,13 @@ var modularizr = (function(){
 				}
 				else {
 					throw {
-						code: 2,
+						code: 3,
 						name: "Error",
 						description: "Module doesn't exist",
 						message: "Module with name '" + module + "' hasn't been registered yet",
 						toString: function(){
 							return this.name + ": " + this.message;
-						} 
+						}
 					};
 				}
 			});
