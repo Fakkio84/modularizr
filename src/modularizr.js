@@ -7,7 +7,7 @@ var MODULARIZR = (function(){
 	 * Registers a module for use it to build singletons or classes
 	 * @author Fakkio84 [lazzaroni@jeflab.it]
 	 * @param {string} name - The module's name 
-	 * @param {function} module - The module's body
+	 * @param {function(publicScope, protectedScope, parameters): {publicScope, protectedScope}} module - The module's body
 	 * @returns {boolean} - true if all went ok
 	 */
 	publicScope.register = function(name, module){
@@ -63,7 +63,7 @@ var MODULARIZR = (function(){
 	 * Builds a "class" function from the modules
 	 * @author Fakkio84 [lazzaroni@jeflab.it]
 	 * @param {string[]} modules - An array of module names from which to build the "class" function
-	 * @returns {function(...*)} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
+	 * @returns {function(...*):classFunction} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
 	 */
 	publicScope.class = function(modules){
 		return function(){
@@ -83,13 +83,12 @@ var MODULARIZR = (function(){
 						message: "Module with name '" + module + "' hasn't been registered yet",
 						toString: function(){
 							return this.name + ": " + this.message;
-						} 
+						}
 					};
 				}
 			});
 			return object.publicScope;
 		};
 	};
-	
 	return publicScope;
 }());

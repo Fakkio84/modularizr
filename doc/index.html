@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js" lang="">
+<html class="no-js" lang="en">
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="x-ua-compatible" content="ie=edge">
@@ -44,45 +44,130 @@
 	<div class="body-full-height">
 		<div class="jumbotron">
 			<div class="container-fluid">
-				<h1>modularizr</h1>
+				<h1>Modularizr</h1>
 				<p>A JS function that allow creations of modularize function that share public, protected and private properties and methods.</p>
 			</div>
 		</div>
 		<section class="documentation container-fluid">
-			<h1>.make(modules)</h1>
+			<h1>MODULARIZR</h1>
 			<h3>Description</h3>
-			<p>Makes an object build on an array of modules. All <code>modules</code> must be registered before they can be used to make an object with this method.</p>
+			<p>Modularizr add a single variable to the global object (window in browsers). Implements three utility function to create objects that can take advantage of private, protected and public properties and methods.</p>
+			<h1>.register(name, module)</h1>
+			<h3>Description</h3>
+			<p>Registers a module for use it to build singletons or classes.</p>			
 			<h3>Parameters</h3>
 			<table class="table table-bordered table-striped js-options-table">
 				<thead>
 					<tr>
 						<th>Name</th>
 						<th>Type</th>
+						<th>Default</th>
 						<th>Description</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>modules</td>
-						<td>array</td>
-						<td>An array of strings that contains the modules names from which build the object.</td>
+						<th>name</th>
+						<td>string</td>
+						<td><em>required</em></td>
+						<td>The module's name.</td>
+					</tr>
+					<tr>
+						<th>module</th>
+						<td>function(publicScope, protectedScope, parameters): {publicScope, protectedScope}</td>
+						<td><em>required</em></td>
+						<td>The module's body.</td>
 					</tr>
 				</tbody>
 			</table>
-			<h3>Returns</h3>
-			<p>qqwqw</p>
+			<h3>Returns <small>boolean</small></h3>
+			<p>True if all went ok.</p>
 			<h3>Example</h3>
-			<pre><code class="language-javascript">modularizr.make([
+			<pre><code class="language-javascript">MODULARIZR.register('module', function(publicScope, protectedScope, parameters){
+	'use strict';
+	
+	publicScope.logArgs = function(){
+		console.log(parameters);
+	};
+
+	return {
+		publicScope: publicScope,
+		protectedScope: protectedScope
+	};
+});</code></pre>
+			<h1>.singleton(modules[, parameters])</h1>
+			<h3>Description</h3>
+			<p>Builds a singleton from the modules passing them an optional array of parameters.</p>
+			<h3>Parameters</h3>
+			<table class="table table-bordered table-striped js-options-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Default</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>modules</th>
+						<td>string[]</td>
+						<td><em>required</em></td>
+						<td>An array of strings that contains the modules names from which build the object.</td>
+					</tr>
+					<tr>
+						<th>[parameters]</th>
+						<td>*[]</td>
+						<td>undefined</td>
+						<td>An array of parameters that will be passed to each modules.</td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Returns <small>object</small></h3>
+			<p>The resulting object built from the modules application.</p>
+			<h3>Example</h3>
+			<pre><code class="language-javascript">var mySingleton = modularizr.singleton([
 	"module1",
 	"module2"
+], [
+	1,
+	"one",
+	{key: "value"}
 ]);</code></pre>
-				</dd>
-			</dl>
-			<h1>.register(name, moduleBody)</h1>
+			<h1>.class(modules)</h1>
+			<h3>Description</h3>
+			<p>Builds a "class" function from the modules</p>
+			<h3>Parameters</h3>
+			<table class="table table-bordered table-striped js-options-table">
+				<thead>
+					<tr>
+						<th>Name</th>
+						<th>Type</th>
+						<th>Default</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<th>modules</th>
+						<td>string[]</td>
+						<td><em>required</em></td>
+						<td>An array of module names from which to build the "class" function.</td>
+					</tr>
+				</tbody>
+			</table>
+			<h3>Returns <small>function(...*):classFunction</small></h3>
+			<p>The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.</p>
+			<h3>Example</h3>
+			<pre><code class="language-javascript">var myClass = modularizr.singleton([
+	"module1",
+	"module2"
+]);
+var myObject = myClass(1, "one", {key: "value"});</code></pre>
 		</section>
 	</div>
 	<footer class="footer text-center clearfix">
-		<p>Modularizr - Last update october the 14th, 2015</p>
+		<p>Modularizr - Last update october the 19th, 2015</p>
 	</footer>
 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
