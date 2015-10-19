@@ -63,7 +63,7 @@ var MODULARIZR = (function(){
 	 * Builds a "class" function from the modules
 	 * @author Fakkio84 [lazzaroni@jeflab.it]
 	 * @param {string[]} modules - An array of module names from which to build the "class" function
-	 * @returns {function(...*)} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
+	 * @returns {function(...*):classFunction} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
 	 */
 	publicScope.class = function(modules){
 		return function(){
@@ -90,6 +90,5 @@ var MODULARIZR = (function(){
 			return object.publicScope;
 		};
 	};
-	
 	return publicScope;
 }());
