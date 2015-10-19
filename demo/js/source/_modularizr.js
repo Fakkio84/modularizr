@@ -20,14 +20,14 @@ var modularizr = (function(){
 		}
 	};
 	
-	publicScope.make = function(modules){
+	publicScope.singleton = function(modules, parameters){
 		//Te object to make
 		var object = {publicScope: {}, protectedScope: {}};
 		
-		//Loop trought arguments and append module to the object
+		//Loop trought modules and append module to the object
 		modules.forEach(function(module){
 			if (registeredModules[module]) {
-				object = registeredModules[module](object.publicScope, object.protectedScope);
+				object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
 			}
 			else {
 				throw {
@@ -41,8 +41,33 @@ var modularizr = (function(){
 				};
 			}
 		});
-		
 		return object.publicScope;
+	};
+
+	publicScope.class = function(modules){
+		return function(){
+			var object = {publicScope: {}, protectedScope: {}};
+			
+			var parameters = Array.prototype.slice.call(arguments);
+			
+			modules.forEach(function(module){
+				if (registeredModules[module]) {
+					object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
+				}
+				else {
+					throw {
+						code: 2,
+						name: "Error",
+						description: "Module doesn't exist",
+						message: "Module with name '" + module + "' hasn't been registered yet",
+						toString: function(){
+							return this.name + ": " + this.message;
+						} 
+					};
+				}
+			});
+			return object.publicScope;
+		};
 	};
 	
 	return publicScope;

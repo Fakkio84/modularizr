@@ -1,4 +1,4 @@
-modularizr.register('module1', function(publicScope, protectedScope, arguments){
+modularizr.register('module1', function(publicScope, protectedScope, parameters){
 	'use strict';
 	var property1 = "Private module1's properties";
 	var method1 = function () {
@@ -39,7 +39,7 @@ modularizr.register('module1', function(publicScope, protectedScope, arguments){
 	};
 });
 
-modularizr.register('module2', function(publicScope, protectedScope, arguments){
+modularizr.register('module2', function(publicScope, protectedScope, parameters){
 	'use strict';
 	var property2 = "Private module2's properties";
 	var method2 = function () {
@@ -80,4 +80,17 @@ modularizr.register('module2', function(publicScope, protectedScope, arguments){
 	};
 });
 
-var myObject = modularizr.make(['module1', 'module2']);
+modularizr.register('module3', function(publicScope, protectedScope, parameters){
+	'use strict';
+	
+	publicScope.logArg = function(){
+		console.log(parameters);
+	};
+
+	return {
+		publicScope: publicScope,
+		protectedScope: protectedScope
+	};
+});
+
+var myObject = modularizr.singleton(['module1', 'module2']);
