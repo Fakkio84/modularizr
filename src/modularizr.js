@@ -1,11 +1,11 @@
 var modularizr = (function(){
 	'use strict';
-	var publicMethods = {};
-	var modules = {};
+	var publicScope = {};
+	var registeredModules = {};
 	
-	publicMethods.register = function(name, module){
-		if (!modules[name]) {
-			modules[name] = module;
+	publicScope.register = function(name, module){
+		if (!registeredModules[name]) {
+			registeredModules[name] = module;
 		}
 		else {
 			throw {
@@ -20,116 +20,62 @@ var modularizr = (function(){
 		}
 	};
 	
-	publicMethods.make = function (modulesNames) {
+	publicScope.singleton = function(modules, parameters){
 		//Te object to make
-		var object = {publicMethods: {}, protectedMethods: {}};
+		var object = {publicScope: {}, protectedScope: {}};
 		
-		//Loop trought arguments and append module to the object
-		modulesNames.forEach(function(module){
-			if (modules[module]) {
-				object = modules[module](object.publicMethods, object.protectedMethods);
+		//Loop trought modules and append module to the object
+		modules.forEach(function(module){
+			if (registeredModules[module]) {
+				object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
 			}
 			else {
 				throw {
 					code: 2,
 					name: "Error",
 					description: "Module doesn't exist",
-					message: "Module with name '" + name + "' hasn't been registered yet",
+					message: "Module with name '" + module + "' hasn't been registered yet",
 					toString: function(){
 						return this.name + ": " + this.message;
 					} 
 				};
 			}
 		});
-		
-		return object.publicMethods;
+		return object.publicScope;
+	};
+
+	publicScope.class = function(modules){
+		return function(){
+			var object = {publicScope: {}, protectedScope: {}};
+			var argLen, parameters = [], a;
+			
+			/* Arrayfy arguments, don't use, 
+			 * var parameters = Array.prototype.slice.call(arguments);
+			 * see: https://github.com/petkaantonov/bluebird/wiki/Optimization-killers#3-managing-arguments
+			 */
+			argLen = arguments.length; for (a = 0; a < argLen; a++) {parameters[a] = arguments[a];}
+			
+			modules.forEach(function(module){
+				if (registeredModules[module]) {
+					object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
+				}
+				else {
+					throw {
+						code: 2,
+						name: "Error",
+						description: "Module doesn't exist",
+						message: "Module with name '" + module + "' hasn't been registered yet",
+						toString: function(){
+							return this.name + ": " + this.message;
+						} 
+					};
+				}
+			});
+			return object.publicScope;
+		};
 	};
 	
-	return publicMethods;
+	return publicScope;
 }());
-
-modularizr.register('module1', function(publicMethods, protectedMethods){
-	'use strict';
-	var property1 = "Private property";
-	var method1 = function () {
-		console.log("I'm a private module1's method");
-		console.log("I'm visible only to module1's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	protectedMethods.property1 = "Protected module1's properties";
-	protectedMethods.method1 = function () {
-		console.log("I'm a protected module1's method");
-		console.log("I'm visible to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	publicMethods.property1 = "Public module1's properties";
-	publicMethods.method1 = function () {
-		console.log("I'm a public module1's method");
-		console.log("I'm visible to everyone can access the outer object, in addition to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-	
-	return {
-		publicMethods: publicMethods,
-		protectedMethods: protectedMethods
-	};
-});
-
-modularizr.register('module2', function(publicMethods, protectedMethods){
-	'use strict';
-	var property2 = "Private property";
-	var method2 = function () {
-		console.log("I'm a private module2's method");
-		console.log("I'm visible only to module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	protectedMethods.property2 = "Protected module2's properties";
-	protectedMethods.method2 = function () {
-		console.log("I'm a protected module2's method");
-		console.log("I'm visible to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-
-	publicMethods.property2 = "Public module2's properties";
-	publicMethods.method2 = function () {
-		console.log("I'm a public module2's method");
-		console.log("I'm visible to everyone can access the outer object, in addition to module1 and module2's methods");
-		console.log("I can access " + property1);
-		console.log("I can access " + protectedMethods.property1);
-		console.log("I can access " + publicMethods.property1);
-		console.log("I can access " + protectedMethods.property2);
-		console.log("I can access " + publicMethods.property2);
-	};
-	
-	return {
-		publicMethods: publicMethods,
-		protectedMethods: protectedMethods
-	};
-});
-
-var myModularizr = modularizr.make(['module1', 'module2']);
 
 //@koala-prepend "source/_modularizr"
