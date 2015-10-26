@@ -141,7 +141,7 @@
 	"one",
 	{key: "value"}
 ]);</code></pre>
-			<h1>.class(modules)</h1>
+			<h1>.class(modules[, parameters])</h1>
 			<h3>Description</h3>
 			<p>Builds a "class" function from the modules</p>
 			<h3>Parameters</h3>
@@ -161,16 +161,22 @@
 						<td><em>required</em></td>
 						<td>An array of module names from which to build the "class" function.</td>
 					</tr>
+					<tr>
+						<th>[parameters]</th>
+						<td>*[]</td>
+						<td>undefined</td>
+						<td>An array of parameters that will be passed to each modules besides "class" function arguments.</td>
+					</tr>
 				</tbody>
 			</table>
 			<h3>Returns <small>function(...*):classFunction</small></h3>
-			<p>The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.</p>
+			<p>The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules besides parameter already passed by <code>.class()</code> method.</p>
 			<h3>Example</h3>
 			<pre><code class="language-javascript">var myClass = modularizr.singleton([
 	"module1",
 	"module2"
-]);
-var myObject = myClass(1, "one", {key: "value"});</code></pre>
+], ["a", 2]);
+var myObject = myClass(3, "d", {key: "value"});</code></pre>
 		</section>
 	</div>
 	<footer class="footer text-center clearfix">
