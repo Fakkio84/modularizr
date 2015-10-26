@@ -63,13 +63,15 @@ var MODULARIZR = (function(){
 	 * Builds a "class" function from the modules
 	 * @author Fakkio84 [lazzaroni@jeflab.it]
 	 * @param {string[]} modules - An array of module names from which to build the "class" function
+	 * @param {*[]} [parameters] - An optional array of parameters that will be passed to each modules
 	 * @returns {function(...*):classFunction} - The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.
 	 */
-	publicScope.class = function(modules){
+	publicScope.class = function(modules, parameters){
 		return function(){
 			var object = {publicScope: {}, protectedScope: {}};
 			
-			var parameters = Array.prototype.slice.call(arguments);
+			//append argument array to the optional parameters array
+			parameters = (parameters || []).concat(Array.prototype.slice.call(arguments));
 			
 			modules.forEach(function(module){
 				if (registeredModules[module]) {
