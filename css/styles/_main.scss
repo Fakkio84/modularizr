@@ -81,6 +81,12 @@ body {
   }
 }
 
+.button-list{
+  .btn{
+    margin-bottom: 6px;
+  }
+}
+
 .body-full-height {
   min-height: 100%;
   margin-bottom: -($line-height-computed * 2);
