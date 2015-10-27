@@ -1,9 +1,9 @@
 # modularizr
 A JS function that allow creations of modularize function that share public, protected and private properties and methods.
 
-[Download JS](http://raw.githubusercontent.com/Fakkio84/modularizr/0.1.0/src/)
+[Download JS](http://raw.githubusercontent.com/Fakkio84/modularizr/v0.2.0/src/modularizr.js)
 
-[Download minified JS](http://raw.githubusercontent.com/Fakkio84/modularizr/0.1.0/src/)
+[Download minified JS](http://raw.githubusercontent.com/Fakkio84/modularizr/v0.2.0/src/modularizr.min.js)
 
 [Read the docs!](http://fakkio84.github.io/modularizr/)
 
