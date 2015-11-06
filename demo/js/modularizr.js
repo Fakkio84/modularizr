@@ -94,3 +94,5 @@ var MODULARIZR = (function(){
 	};
 	return publicScope;
 }());
+
+//@koala-prepend "source/_modularizr"
