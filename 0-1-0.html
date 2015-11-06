@@ -29,8 +29,8 @@
 
 			<div class="collapse navbar-collapse" id="documentation-menu">
 				<ul class="nav navbar-nav">
-					<li class="active"><a href=".">Current<span class="sr-only">(current)</span></a></li>
-					<li><a href="./0-1-0.html">v0.1.0</a></li>
+					<li><a href=".">Current</a></li>
+					<li class="active"><a href="./0-1-0.html">v0.1.0<span class="sr-only">(current)</span></a></li>
 					<li><a href="./license.html">License</a></li>
 				</ul>
 				<div class="nav navbar-nav"></div>
@@ -45,18 +45,6 @@
 		<h1 class="text-center">Menu</h1>
 	</nav>
 	<div class="body-full-height">
-		<div class="jumbotron">
-			<div class="container-fluid">
-				<h1>Modularizr<small class="subheading">currenlty v0.2.0</small></h1>
-				<p>A JS function that allow creations of modularize function that share public, protected and private properties and methods.</p>
-				<p class="text-center button-list">
-					<a href="https://raw.githubusercontent.com/Fakkio84/modularizr/v0.2.0/src/modularizr.js" class="btn btn-primary" download><span class="fa fa-download"></span> Download .js</a>
-					<a href="https://raw.githubusercontent.com/Fakkio84/modularizr/v0.2.0/src/modularizr.min.js" class="btn btn-primary" download><span class="fa fa-download"></span> Download .min.js</a>
-					<a href="https://github.com/Fakkio84/modularizr/archive/v0.2.0.zip" class="btn btn-info" download><span class="fa fa-file-archive-o"></span> Download archive</a>
-					<a href="https://github.com/Fakkio84/modularizr" class="btn btn-default"><span class="fa fa-github"></span> Fork on GitHub</a>
-				</p>
-			</div>
-		</div>
 		<section class="documentation container-fluid">
 			<h1>MODULARIZR</h1>
 			<h3>Description</h3>
@@ -143,7 +131,7 @@
 	"one",
 	{key: "value"}
 ]);</code></pre>
-			<h1>.class(modules[, parameters])</h1>
+			<h1>.class(modules)</h1>
 			<h3>Description</h3>
 			<p>Builds a "class" function from the modules</p>
 			<h3>Parameters</h3>
@@ -163,22 +151,16 @@
 						<td><em>required</em></td>
 						<td>An array of module names from which to build the "class" function.</td>
 					</tr>
-					<tr>
-						<th>[parameters]</th>
-						<td>*[]</td>
-						<td>undefined</td>
-						<td>An array of parameters that will be passed to each modules besides "class" function arguments.</td>
-					</tr>
 				</tbody>
 			</table>
 			<h3>Returns <small>function(...*):classFunction</small></h3>
-			<p>The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules besides parameter already passed by <code>.class()</code> method.</p>
+			<p>The resulting "class" function built from the modules application. It takes an arbitrary number of arguments and passes them to the modules.</p>
 			<h3>Example</h3>
 			<pre><code class="language-javascript">var myClass = modularizr.singleton([
 	"module1",
 	"module2"
-], ["a", 2]);
-var myObject = myClass(3, "d", {key: "value"});</code></pre>
+]);
+var myObject = myClass(1, "one", {key: "value"});</code></pre>
 		</section>
 	</div>
 	<footer class="footer text-center clearfix">

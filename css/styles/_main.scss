@@ -75,6 +75,10 @@ body {
   }
 }
 
+.subheading{
+  display: block;
+}
+
 #documentation-menu .tocify-header{
   @media (min-width: $screen-sm-min) {
     display: none !important; //Per sovrascrivere il display: block !important; dato da bootstrap
