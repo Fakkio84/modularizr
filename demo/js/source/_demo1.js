@@ -93,4 +93,16 @@ MODULARIZR.register('module3', function(publicScope, protectedScope, parameters)
 	};
 });
 
+MODULARIZR.register('module-error', function(publicScope, protectedScope, parameters){
+	'use strict';
+	
+	publicScope.logArg = function(){
+		console.log(parameters);
+	};
+
+	return {
+		protectedScope: protectedScope
+	};
+});
+
 var myObject = MODULARIZR.singleton(['module1', 'module2']);
