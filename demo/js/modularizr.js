@@ -11,11 +11,8 @@ var MODULARIZR = (function(){
 	 * @returns {boolean} - true if all went ok
 	 */
 	publicScope.register = function(name, module){
-		if (!registeredModules[name]) {
-			registeredModules[name] = module;
-			return true;
-		}
-		else {
+		//If a module with this name has already been registered throws an error
+		if (registeredModules[name]) {
 			throw {
 				code: 1,
 				name: "Error",
@@ -26,6 +23,9 @@ var MODULARIZR = (function(){
 				} 
 			};
 		}
+		//Else registers the module;
+		registeredModules[name] = module;
+		return true;
 	};
 	
 	/**
@@ -41,10 +41,8 @@ var MODULARIZR = (function(){
 		
 		//Loop trought modules and append module to the object
 		modules.forEach(function(module){
-			if (registeredModules[module]) {
-				object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
-			}
-			else {
+			//If module doesn't exist throws an error
+			if (!registeredModules[module]) {
 				throw {
 					code: 2,
 					name: "Error",
@@ -54,6 +52,20 @@ var MODULARIZR = (function(){
 						return this.name + ": " + this.message;
 					} 
 				};
+			}
+			//else applies module to the object
+			object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
+			//If a module doesn't return an object with {protectedScope, publicScope} throws error
+			if (!object.protectedScope || !object.publicScope) {
+				throw {
+					code: 4,
+					name: "Error",
+					description: "Module error",
+					message: "The module '" + module + "' doesn't return the right object (it must return {protectedScope, publicScope}).",
+					toString: function(){
+						return this.name + ": " + this.message;
+					} 
+				};			
 			}
 		});
 		return object.publicScope;
@@ -74,10 +86,8 @@ var MODULARIZR = (function(){
 			parameters = (parameters || []).concat(Array.prototype.slice.call(arguments));
 			
 			modules.forEach(function(module){
-				if (registeredModules[module]) {
-					object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
-				}
-				else {
+				//If module doesn't exist throws an error
+				if (!registeredModules[module]) {
 					throw {
 						code: 3,
 						name: "Error",
@@ -88,11 +98,23 @@ var MODULARIZR = (function(){
 						}
 					};
 				}
+				//else applies module to the object
+				object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
+				//If a module doesn't return an object with {protectedScope, publicScope} throws error
+				if (!object.protectedScope || !object.publicScope) {
+					throw {
+						code: 4,
+						name: "Error",
+						description: "Module error",
+						message: "The module '" + module + "' doesn't return the right object (it must return {protectedScope, publicScope}).",
+						toString: function(){
+							return this.name + ": " + this.message;
+						} 
+					};			
+				}
 			});
 			return object.publicScope;
 		};
 	};
 	return publicScope;
 }());
-
-//@koala-prepend "source/_modularizr"
