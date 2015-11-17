@@ -81,9 +81,11 @@ var MODULARIZR = (function(){
 	publicScope.class = function(modules, parameters){
 		return function(){
 			var object = {publicScope: {}, protectedScope: {}};
+			var classParameters;
 			
 			//append argument array to the optional parameters array
-			parameters = (parameters || []).concat(Array.prototype.slice.call(arguments));
+			classParameters = (parameters || []);
+			classParameters = classParameters.concat(Array.prototype.slice.call(arguments));
 			
 			modules.forEach(function(module){
 				//If module doesn't exist throws an error
@@ -99,7 +101,7 @@ var MODULARIZR = (function(){
 					};
 				}
 				//else applies module to the object
-				object = registeredModules[module](object.publicScope, object.protectedScope, parameters);
+				object = registeredModules[module](object.publicScope, object.protectedScope, classParameters);
 				//If a module doesn't return an object with {protectedScope, publicScope} throws error
 				if (!object.protectedScope || !object.publicScope) {
 					throw {
